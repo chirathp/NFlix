@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutflix/constants.dart';
+import 'package:flutflix/details/details_movieScreen.dart';
 import 'package:flutter/material.dart';
 
 class HighestsGrossingSlider extends StatelessWidget {
@@ -27,7 +28,14 @@ class HighestsGrossingSlider extends StatelessWidget {
         itemBuilder: (context, itemIndex, pageViewIndex) {
           return GestureDetector(
             onTap:  () {
-             
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DetailsScreen(
+                    movie: snapshot.data[itemIndex]
+                  ),
+                ),
+              );
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
