@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutflix/api/api.dart';
 import 'package:flutflix/models/movieapi.dart';
+import 'package:flutflix/models/tvapi.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,7 +13,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => HomeScreenState();
 }
 
 
@@ -77,11 +78,13 @@ class SearchScreen extends StatelessWidget {
   }
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   late Future<List<Movie>> trendingMovies;
   late Future<List<Movie>> topRatedMovies;
   late Future<List<Movie>> onCinemaMovies;
-  late Future<List<Movie>> onTVMovies;
+  late Future<List<TvSeries>> onTVMovies;
+  late Future<List<Movie>> childrenFriendly;
+
 
   @override
   void initState() {
@@ -90,6 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
     topRatedMovies = Api().getTopRatedMovies();
     onCinemaMovies = Api().getOnCinemaMovies();
     onTVMovies = Api().getOnTVMovies();
+    childrenFriendly = Api().getChildrenFriendly();
   }
 
   @override
@@ -107,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         // menu button
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: const Icon(Icons.menu),
           onPressed: () {
             // handling the menu button tap
              // Navigate to the menu screen
@@ -124,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // Navigate to the search screen
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => SearchScreen()),
+                MaterialPageRoute(builder: (context) => const SearchScreen()),
               );
             },
             icon: const Icon(Icons.search),
@@ -247,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 20),
                   SizedBox(
                     child: FutureBuilder(
-                      future: topRatedMovies, // PUT THIS CORRECTLY
+                      future: childrenFriendly,
                       builder: (context, snapshot) {
                         if(snapshot.hasError) {
                           return Center(
@@ -270,6 +274,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-
-
-

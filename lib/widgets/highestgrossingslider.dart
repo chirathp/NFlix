@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutflix/constants.dart';
+import 'package:flutflix/models/movieapi.dart';
 import 'package:flutter/material.dart';
 
 class HighestsGrossingSlider extends StatelessWidget {
   const HighestsGrossingSlider({
     super.key, required this.snapshot,
   });
-
 
   final AsyncSnapshot snapshot;
 
@@ -37,8 +37,8 @@ class HighestsGrossingSlider extends StatelessWidget {
                 width: 500,
                 child: Image.network(
                   filterQuality: FilterQuality.high,
-                  fit: BoxFit.cover,
-                  '${Constants.imagePath}${snapshot.data[itemIndex].posterPath}'
+                  fit: BoxFit.fitHeight,
+                  '${Constants.imagePath}${snapshot.data[itemIndex].backdropPath}'
                 ),
               ),
             ),
