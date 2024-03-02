@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutflix/constants.dart';
-import 'package:flutflix/models/movieapi.dart';
 import 'package:flutter/material.dart';
 
 class HighestsGrossingSlider extends StatelessWidget {
