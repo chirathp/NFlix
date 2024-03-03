@@ -7,13 +7,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: '&FLIX',
+      title: '&flix',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Color.fromARGB(255, 43, 40, 40),
         useMaterial3: true,

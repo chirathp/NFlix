@@ -32,14 +32,6 @@ class DetailsScreen extends StatelessWidget {
               color: Colors.black.withOpacity(0.3), 
             ),
           ),
-          // Positioned.fill(
-          //   child: ImageFiltered(
-          //     imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          //     child: Container(
-          //       color: Colors.black.withOpacity(0.5),
-          //     ),
-          //   ),
-          // ),
           CustomScrollView(
             slivers: [
               SliverAppBar.large(
