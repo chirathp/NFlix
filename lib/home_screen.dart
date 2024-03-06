@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutflix/api/api.dart';
+import 'package:flutflix/constants.dart';
+import 'package:flutflix/details/details_movieScreen.dart';
 import 'package:flutflix/models/movieapi.dart';
 import 'package:flutflix/models/tvapi.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +11,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'widgets/topRatedslider.dart';
 import 'widgets/highestgrossingslider.dart';
 
+//packages imported when search bar implemented
+import 'dart:async';
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutflix/constants.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,112 +27,212 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => HomeScreenState();
 }
 
-// menu
-class MenuScreen extends StatelessWidget {
-  const MenuScreen({Key? key}) : super(key: key);
-
+class WatchlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menu'),
+        title: const Text('Watchlist'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('This is the menu screen'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate back to the home screen
-                Navigator.pop(context);
-              },
-              child: const Text('Go back'),
-            ),
-          ],
-        ),
+        child: const Text('This is the watchlist screen'),
       ),
     );
   }
 }
+
+class WatchLaterScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Watch Later'),
+      ),
+      body: Center(
+        child: const Text('This is the watch later screen'),
+      ),
+    );
+  }
+}
+
+
+// menu
+class MenuScreen extends StatefulWidget {
+  const MenuScreen({Key? key}) : super(key: key);
+
+  @override
+  State<MenuScreen> createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    HomeScreen(),
+    WatchlistScreen(),
+    WatchLaterScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background image
+          Image.asset(
+            'assets/background_image.jpg', // Replace with your background image path
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          // Transparent overlay
+          Container(
+            color: Colors.black.withOpacity(0.5), // Adjust the opacity as needed
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          // Content
+          _screens[_currentIndex],
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.transparent,
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Watchlist',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.watch_later),
+            label: 'Watch Later',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 
 // search
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _SearchScreenState createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  late TextEditingController _searchController;
+  final _searchController = TextEditingController();
   List<dynamic> _searchResults = [];
+  bool _isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _searchController = TextEditingController();
-  }
+  Timer? _debounce;
 
   @override
   void dispose() {
     _searchController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
-  Future<void> _fetchSearchResults() async {
-    String query = _searchController.text;
-    final response = await http.get(Uri.parse('https://api.themoviedb.org/3/search/movie?api_key=YOUR_API_KEY&query=$query'));
+  Future<void> _fetchSearchResults(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _isLoading = false;
+        _searchResults = [];
+      });
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    final response = await http.get(Uri.parse(
+        'https://api.themoviedb.org/3/search/movie?api_key=${Constants.apiKey}&query=$query'));
+
     if (response.statusCode == 200) {
       final jsonBody = json.decode(response.body);
       setState(() {
+        _isLoading = false;
         _searchResults = jsonBody['results'];
       });
     } else {
-      throw Exception('Failed to load search results');
+      setState(() {
+        _isLoading = false;
+        _searchResults = [];
+      });
     }
+  }
+
+  void _onSearchTextChanged(String text) {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      _fetchSearchResults(text);
+    });
+  }
+
+  void _navigateToDetailsScreen(dynamic movie) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DetailsScreen(
+          movie: Movie.fromJson(movie),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextFormField(
+        title: TextField(
           controller: _searchController,
-          decoration: InputDecoration(
+          onChanged: _onSearchTextChanged,
+          decoration: const InputDecoration(
             hintText: 'Search for a movie...',
-            suffixIcon: IconButton(
-              icon: Icon(Icons.search),
-              onPressed: _fetchSearchResults,
-            ),
           ),
         ),
       ),
-      body: _searchResults.isNotEmpty
-          ? ListView.builder(
-              itemCount: _searchResults.length,
-              itemBuilder: (context, index) {
-                final movie = _searchResults[index];
-                return ListTile(
-                  title: Text(movie['title']),
-                  subtitle: Text(movie['overview']),
-                  leading: Image.network(
-                    'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
-                    errorBuilder: (context, error, stackTrace) {
-                      return const Icon(Icons.movie);
-                    },
-                  ),
-                );
-              },
-            )
-          : const Center(
-              child: Text('No results found'),
-            ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : _searchResults.isNotEmpty
+              ? ListView.builder(
+                  itemCount: _searchResults.length,
+                  itemBuilder: (context, index) {
+                    final movie = _searchResults[index];
+                    return ListTile(
+                      title: Text(movie['title']),
+                      subtitle: Text(movie['overview']),
+                      leading: Image.network(
+                        'https://image.tmdb.org/t/p/w500${movie['poster_path']}',
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.movie);
+                        },
+                      ),
+                      onTap: () => _navigateToDetailsScreen(movie),
+                    );
+                  },
+                )
+              : const Center(
+                  child: Text('No results found'),
+                ),
     );
   }
 }
+
 
 class HomeScreenState extends State<HomeScreen> {
   late Future<List<Movie>> trendingMovies;

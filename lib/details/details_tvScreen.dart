@@ -1,41 +1,17 @@
 import 'dart:ui';
 
 import 'package:flutflix/constants.dart';
-import 'package:flutflix/models/movieapi.dart';
+import 'package:flutflix/models/tvapi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreen extends StatelessWidget {
   const DetailsScreen({
-    Key? key,
+    super.key,
     required this.movie,
-  }) : super(key: key);
-
-  final Movie movie;
-
-  @override
-  _DetailsScreenState createState() => _DetailsScreenState();
-}
-
-class _DetailsScreenState extends State<DetailsScreen> {
-  bool _isAddedToWatchedlist = false;
-  bool _isAddedToWatchLater = false;
-
-  void _addToWatchedlist() {
-    setState(() {
-      _isAddedToWatchedlist = true;
-    });
-    // Add logic to add movie to watchlist
-  }
-
-  void _addToWatchLater() {
-    setState(() {
-      _isAddedToWatchLater = true;
-    });
-    // Add logic to add movie to watch later
-  }
-
+  });
+  final TvSeries movie;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,22 +19,22 @@ class _DetailsScreenState extends State<DetailsScreen> {
         children: [
           //Image.asset(
           Image.network(
-            '${Constants.imagePath}${widget.movie.backdropPath}',
+            '${Constants.imagePath}${movie.backdropPath}',
             //'assets/image.png',
             fit: BoxFit.cover,
-            width: double.maxFinite, //800, //double.infinity,
-            height: double.maxFinite, //900, //double.infinity,
+            width: double.maxFinite,//800, //double.infinity,
+            height: double.maxFinite,//900, //double.infinity,
           ),
           // to make the image blur
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
             child: Container(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withOpacity(0.3), 
             ),
           ),
           CustomScrollView(
             slivers: [
-              SliverAppBar(
+              SliverAppBar.large(
                 leading: IconButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -73,14 +49,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 floating: true,
                 flexibleSpace: FlexibleSpaceBar(
                   title: Text(
-                    widget.movie.title,
+                    movie.name,
                     style: GoogleFonts.belleza(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
                   background: Image.network(
-                    '${Constants.imagePath}${widget.movie.backdropPath}',
+                    '${Constants.imagePath}${movie.backdropPath}',
                     filterQuality: FilterQuality.high,
                     fit: BoxFit.cover,
                   ),
@@ -92,11 +68,18 @@ class _DetailsScreenState extends State<DetailsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Description',
+                        style: GoogleFonts.openSans(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                       const SizedBox(height: 16),
                       Text(
-                        widget.movie.overView,
+                        movie.overView,
                         style: GoogleFonts.roboto(
-                          fontSize: 15,
+                          fontSize: 18,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
@@ -107,6 +90,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           children: [
                             Container(
                               padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: Row(
                                 children: [
                                   Text(
@@ -117,7 +104,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     ),
                                   ),
                                   Text(
-                                    widget.movie.releaseDate,
+                                    movie.firstAirDate,
                                     style: GoogleFonts.roboto(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -128,6 +115,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             ),
                             Container(
                               padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: Row(
                                 children: [
                                   Text(
@@ -144,7 +135,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    '${widget.movie.voteAverage.toStringAsFixed(1)}/10',
+                                    '${movie.voteAverage.toStringAsFixed(1)}/10',
                                     style: GoogleFonts.roboto(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
@@ -155,20 +146,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             )
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            onPressed: _isAddedToWatchedlist ? null : _addToWatchedlist,
-                            child: const Text('Watched List'),
-                          ),
-                          ElevatedButton(
-                            onPressed: _isAddedToWatchLater ? null : _addToWatchLater,
-                            child: const Text('Watch Later'),
-                          ),
-                        ],
                       ),
                     ],
                   ),
@@ -181,4 +158,3 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 }
-

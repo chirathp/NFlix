@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "394635354700",
+    "project_id": "flutterfire-ui-nflix",
+    "storage_bucket": "flutterfire-ui-nflix.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394635354700:android:c1d3dc407289e57c870ae9",
+        "android_client_info": {
+          "package_name": "com.example.movie"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAFYB4RgmgWoNh-gR74aQqUTARgcM_zfY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
