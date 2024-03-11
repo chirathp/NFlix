@@ -1,5 +1,7 @@
 //import 'package:flutflix/colors.dart';
 import 'package:flutflix/home_screen.dart';
+import 'package:flutflix/login_screen.dart';
+import 'package:flutflix/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color.fromARGB(255, 43, 40, 40),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: const LoginPage(),
     );
   }
 }
