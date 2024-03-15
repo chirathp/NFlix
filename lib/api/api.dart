@@ -6,8 +6,8 @@ import 'package:nflix/models/tvapi.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const trendingUrl =
-      'https://api.themoviedb.org/3/trending/movie/day?api_key=${Constants.apiKey}';
+  static const highestGrossingMoviesUrl =
+      'https://api.themoviedb.org/3/discover/movie?api_key=${Constants.apiKey}&sort_by=revenue.desc';
   static const topRatedUrl =
       'https://api.themoviedb.org/3/movie/top_rated?api_key=${Constants.apiKey}';
   static const onCinemaUrl =
@@ -20,7 +20,7 @@ class Api {
   //     'https://api.themoviedb.org/3/search/movie?api_key=${Constants.apiKey}';
 
   Future<List<Movie>> getTrendingMovies() async {
-    final response = await http.get(Uri.parse(trendingUrl));
+    final response = await http.get(Uri.parse(highestGrossingMoviesUrl));
     if (response.statusCode == 200) {
       final decodedData = json.decode(response.body)['results'] as List;
       return decodedData.map((movie) => Movie.fromJson(movie)).toList();
