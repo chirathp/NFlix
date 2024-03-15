@@ -1,5 +1,4 @@
-//import 'package:flutflix/colors.dart';
-import 'package:flutflix/home_screen.dart';
+import 'package:nflix/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,8 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: '&flix',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Color.fromARGB(255, 43, 40, 40),
-        useMaterial3: true,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 43, 40, 40),
       ),
       home: const HomeScreen(),
     );

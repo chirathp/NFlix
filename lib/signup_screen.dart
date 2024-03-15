@@ -1,5 +1,5 @@
-import 'package:flutflix/home_screen.dart';
-import 'package:flutflix/login_screen.dart';
+import 'package:nflix/home_screen.dart';
+import 'package:nflix/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SignupPage extends StatelessWidget {
@@ -11,7 +11,7 @@ class SignupPage extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('peaky_blinders.png'),
                 fit: BoxFit.cover,
@@ -23,7 +23,7 @@ class SignupPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Create an account',
                   style: TextStyle(
                     fontSize: 18,
@@ -31,7 +31,7 @@ class SignupPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Username',
@@ -42,7 +42,7 @@ class SignupPage extends StatelessWidget {
                     fillColor: Colors.white.withOpacity(0.3),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Email',
@@ -53,7 +53,7 @@ class SignupPage extends StatelessWidget {
                     fillColor: Colors.white.withOpacity(0.3),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   obscureText: true,
                   decoration: InputDecoration(
@@ -65,7 +65,7 @@ class SignupPage extends StatelessWidget {
                     fillColor: Colors.white.withOpacity(0.3),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   obscureText: true,
                   decoration: InputDecoration(
@@ -77,17 +77,17 @@ class SignupPage extends StatelessWidget {
                     fillColor: Colors.white.withOpacity(0.3),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => const HomeScreen()),
                     );
                   },
-                  child: Text('Sign Up'),
+                  child: const Text('Sign Up'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
                     Navigator.pushReplacement(
@@ -95,7 +95,7 @@ class SignupPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );
                   },
-                  child: Text('Already have an account?'),
+                  child: const Text('Already have an account?'),
                 ),
               ],
             ),

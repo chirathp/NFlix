@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
-class searchBarFunc extends StatefulWidget{
-  const searchBarFunc({super.key});
+// class searchBarFunc extends StatefulWidget{
+//   const searchBarFunc({super.key});
 
-  @override
-  State<searchBarFunc> createState() => searchBarFuncState();
-}
+//   @override
+//   State<searchBarFunc> createState() => searchBarFuncState();
+// }
 
-class searchBarFuncState extends State<searchBarFunc> {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector();
-  }
-}
+// class searchBarFuncState extends State<searchBarFunc> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return GestureDetector();
+//   }
+// }

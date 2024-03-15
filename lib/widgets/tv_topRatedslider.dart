@@ -1,10 +1,10 @@
 import 'package:nflix/constants.dart';
-import 'package:nflix/details/details_movieScreen.dart';
+import 'package:nflix/details/details_tvScreen.dart';
 import 'package:flutter/material.dart';
 
 
-class TopRatedSlider extends StatelessWidget {
-  const TopRatedSlider({
+class TVTopRatedSlider extends StatelessWidget {
+  const TVTopRatedSlider({
     super.key, required this.snapshot,
   });
   final AsyncSnapshot snapshot;
@@ -25,7 +25,7 @@ class TopRatedSlider extends StatelessWidget {
                 Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailsScreen(
+                  builder: (context) => DetailsTVScreen(
                     movie: snapshot.data[index]
                   ),
                 ),

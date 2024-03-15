@@ -1,10 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutflix/api/api.dart';
-import 'package:flutflix/constants.dart';
-import 'package:flutflix/details/details_movieScreen.dart';
-import 'package:flutflix/models/movieapi.dart';
-import 'package:flutflix/models/tvapi.dart';
+import 'package:nflix/api/api.dart';
+import 'package:nflix/constants.dart';
+import 'package:nflix/details/details_movieScreen.dart';
+import 'package:nflix/models/movieapi.dart';
+import 'package:nflix/models/tvapi.dart';
+import 'package:nflix/watchlist_item.dart';
+import 'package:nflix/widgets/tv_topRatedslider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,11 +16,8 @@ import 'widgets/highestgrossingslider.dart';
 //packages imported when search bar implemented
 import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:flutflix/constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -27,33 +26,72 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => HomeScreenState();
 }
 
-class WatchlistScreen extends StatelessWidget {
+
+class WatchlistScreen extends StatefulWidget {
+  const WatchlistScreen({Key? key}) : super(key: key);
+
+  @override
+  _WatchlistScreenState createState() => _WatchlistScreenState();
+}
+
+class _WatchlistScreenState extends State<WatchlistScreen> {
+  late WatchlistModel watchlistModel;
+  late Api api;
+
+  @override
+  void initState() {
+    super.initState();
+    watchlistModel = WatchlistModel();
+    api = Api();
+    watchlistModel.loadWatchlist().then((_) {
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Watchlist'),
       ),
-      body: Center(
-        child: const Text('This is the watchlist screen'),
+      body: FutureBuilder(
+        future: _loadMovies(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (watchlistModel.items.isEmpty) {
+              return const Center(child: Text('No movies in watchlist'));
+            } else {
+              return ListView.builder(
+                itemCount: watchlistModel.items.length,
+                itemBuilder: (context, index) {
+                  final item = watchlistModel.items[index];
+                  return ListTile(
+                    title: Text(item.title),
+                    leading: Image.network(item.posterPath),
+                    onTap: () {
+                      // Implement navigation to movie details screen here
+                    },
+                  );
+                },
+              );
+            }
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
+  }
+
+  Future<List<Movie>> _loadMovies() async {
+    final List<Movie> movies = [];
+    for (final item in watchlistModel.items) {
+      final movie = await api.getMovieDetails(item.movieId);
+      movies.add(movie);
+    }
+    return movies;
   }
 }
 
-class WatchLaterScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Watch Later'),
-      ),
-      body: Center(
-        child: const Text('This is the watch later screen'),
-      ),
-    );
-  }
-}
 
 
 // menu
@@ -68,9 +106,8 @@ class _MenuScreenState extends State<MenuScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
-    WatchlistScreen(),
-    WatchLaterScreen(),
+    const HomeScreen(),
+    const WatchlistScreen(),
   ];
 
   @override
@@ -87,7 +124,8 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
           // Transparent overlay
           Container(
-            color: Colors.black.withOpacity(0.5), // Adjust the opacity as needed
+            color:
+                Colors.black.withOpacity(0.5), // Adjust the opacity as needed
             width: double.infinity,
             height: double.infinity,
           ),
@@ -112,16 +150,12 @@ class _MenuScreenState extends State<MenuScreen> {
             icon: Icon(Icons.bookmark),
             label: 'Watchlist',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.watch_later),
-            label: 'Watch Later',
-          ),
+          
         ],
       ),
     );
   }
 }
-
 
 // search
 class SearchScreen extends StatefulWidget {
@@ -159,14 +193,27 @@ class _SearchScreenState extends State<SearchScreen> {
     });
 
     final response = await http.get(Uri.parse(
-        'https://api.themoviedb.org/3/search/movie?api_key=${Constants.apiKey}&query=$query'));
+        'https://api.themoviedb.org/3/search/person?api_key=${Constants.apiKey}&query=$query'));
 
     if (response.statusCode == 200) {
       final jsonBody = json.decode(response.body);
-      setState(() {
-        _isLoading = false;
-        _searchResults = jsonBody['results'];
-      });
+      final personId = jsonBody['results'][0]
+          ['id']; // Assuming the first result is the desired person
+      final moviesResponse = await http.get(Uri.parse(
+          'https://api.themoviedb.org/3/person/$personId/movie_credits?api_key=${Constants.apiKey}'));
+
+      if (moviesResponse.statusCode == 200) {
+        final moviesJsonBody = json.decode(moviesResponse.body);
+        setState(() {
+          _isLoading = false;
+          _searchResults = moviesJsonBody['cast'];
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+          _searchResults = [];
+        });
+      }
     } else {
       setState(() {
         _isLoading = false;
@@ -232,7 +279,6 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
-
 
 class HomeScreenState extends State<HomeScreen> {
   late Future<List<Movie>> trendingMovies;
@@ -400,7 +446,7 @@ class HomeScreenState extends State<HomeScreen> {
                             child: Text(snapshot.error.toString()),
                           );
                         } else if (snapshot.hasData) {
-                          return TopRatedSlider(
+                          return TVTopRatedSlider(
                             snapshot: snapshot,
                           );
                         } else {

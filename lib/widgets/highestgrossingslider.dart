@@ -1,9 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutflix/constants.dart';
-import 'package:flutflix/details/details_movieScreen.dart';
+import 'package:nflix/constants.dart';
+import 'package:nflix/details/details_movieScreen.dart';
+import 'package:nflix/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class HighestsGrossingSlider extends StatelessWidget {
+
+
   const HighestsGrossingSlider({
     super.key, required this.snapshot,
   });

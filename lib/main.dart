@@ -1,11 +1,12 @@
 //import 'package:flutflix/colors.dart';
-import 'package:flutflix/home_screen.dart';
-import 'package:flutflix/login_screen.dart';
-import 'package:flutflix/signup_screen.dart';
+import 'package:nflix/dependency_injection.dart';
+import 'package:nflix/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
+  DependencyInjection.init();
 }
 
 class MyApp extends StatelessWidget {
@@ -13,14 +14,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: '&flix',
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: Color.fromARGB(255, 43, 40, 40),
-        useMaterial3: true,
+        scaffoldBackgroundColor: const Color.fromARGB(255, 43, 40, 40),
       ),
-      home: const LoginPage(),
+      home: LoginPage(),
     );
   }
 }

@@ -1,9 +1,10 @@
 import 'dart:ui';
 
-import 'package:flutflix/constants.dart';
-import 'package:flutflix/models/movieapi.dart';
+import 'package:nflix/constants.dart';
+import 'package:nflix/models/movieapi.dart';
+import 'package:nflix/models/tvapi.dart';
+import 'package:nflix/watchlist_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -19,25 +20,11 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  bool _isAddedToWatchedlist = false;
-  bool _isAddedToWatchLater = false;
-
-  void _addToWatchedlist() {
-    setState(() {
-      _isAddedToWatchedlist = true;
-    });
-    // Add logic to add movie to watchlist
-  }
-
-  void _addToWatchLater() {
-    setState(() {
-      _isAddedToWatchLater = true;
-    });
-    // Add logic to add movie to watch later
-  }
 
   @override
   Widget build(BuildContext context) {
+    final watchlistModel = WatchlistModel();
+    
     return Scaffold(
       body: Stack(
         children: [
@@ -160,14 +147,25 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
+                          // Inside DetailsScreen build method
                           ElevatedButton(
-                            onPressed: _isAddedToWatchedlist ? null : _addToWatchedlist,
-                            child: const Text('Watched List'),
+                            onPressed: () {
+                              final WatchlistModel watchlistModel = WatchlistModel();
+                              watchlistModel.loadWatchlist().then((_) {
+                                var movie;
+                                watchlistModel.addToWatchlist(WatchlistItem(
+                                  movieId: movie.id,
+                                  title: movie.title,
+                                  posterPath: movie.posterPath,
+                                ));
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Added to watchlist')),
+                              );
+                            },
+                            child: const Text('Add to Watchlist'),
                           ),
-                          ElevatedButton(
-                            onPressed: _isAddedToWatchLater ? null : _addToWatchLater,
-                            child: const Text('Watch Later'),
-                          ),
+
                         ],
                       ),
                     ],

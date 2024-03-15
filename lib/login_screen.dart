@@ -1,4 +1,5 @@
-import 'package:flutflix/signup_screen.dart';
+import 'package:nflix/home_screen.dart';
+import 'package:nflix/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,7 +11,7 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('batman.png'),
                 fit: BoxFit.cover,
@@ -22,7 +23,7 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Log in to your account',
                   style: TextStyle(
                     fontSize: 18,
@@ -30,7 +31,7 @@ class LoginPage extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   decoration: InputDecoration(
                     hintText: 'Username',
@@ -41,7 +42,7 @@ class LoginPage extends StatelessWidget {
                     fillColor: Colors.white.withOpacity(0.3),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextField(
                   obscureText: true,
                   decoration: InputDecoration(
@@ -53,22 +54,26 @@ class LoginPage extends StatelessWidget {
                     fillColor: Colors.white.withOpacity(0.3),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     // Add your login logic here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    );
                   },
-                  child: Text('Login'),
+                  child: const Text('Login'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SignupPage()),
+                      MaterialPageRoute(builder: (context) => const SignupPage()),
                     );
                   },
-                  child: Text('Dont have an account?'),
+                  child: const Text('Dont have an account?'),
                 ),
               ],
             ),

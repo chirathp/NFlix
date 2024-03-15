@@ -1,13 +1,12 @@
 import 'dart:ui';
 
-import 'package:flutflix/constants.dart';
-import 'package:flutflix/models/tvapi.dart';
+import 'package:nflix/constants.dart';
+import 'package:nflix/models/tvapi.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({
+class DetailsTVScreen extends StatelessWidget {
+  const DetailsTVScreen({
     super.key,
     required this.movie,
   });

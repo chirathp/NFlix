@@ -1,4 +1,4 @@
-name: flutflix
+name: nflix
 description: A new Flutter project.
 publish_to: 'none' 
 version: 1.0.0+1
@@ -9,14 +9,20 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
-  google_fonts: ^5.1.0
+  google_fonts: ^6.2.1
   http: ^1.1.0
   carousel_slider: ^4.2.1
+  firebase_auth: ^4.16.0
+  cloud_firestore: ^4.14.0
+  firebase_core: ^2.27.1
+  shared_preferences: ^2.0.10
+  connectivity_plus: ^3.0.3
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 flutter:
 
